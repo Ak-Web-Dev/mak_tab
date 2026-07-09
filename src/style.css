@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #2B3035;
+    background-color: #373f46;
     font-family: GSans;
 }
 #bd {
@@ -9,6 +9,8 @@ body {
     -webkit-user-drag: none;
     z-index: -1;
     position: absolute;
+    top: 0;
+    left: 0;
     margin: 0;
     width: 100%;
     height: 100vh;
@@ -25,13 +27,56 @@ h1, h2, h3, h4, h5, h6, p {color: white;}
 .spinner-border {
     position: absolute;
     left: 50%;
-    top: 20%;
+    top: 50%;
     z-index: 2;
 }
 .alert {
-    background: #2B3035;
+    /*background: #2B3035;*/
     border: none;
-    margin-right: 200px;
-    margin-left: 200px;
-    margin-top: 50px;
+    margin-right: 8%;
+    margin-left: 8%;
+    margin-top: 8%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.fm {
+    margin-left: 350px;
+}
+.form-button {
+    margin-right: 300px !important;
+}
+#calcResult {
+    margin-top: 15px;
+    border: 2px solid royalblue;
+}
+.tools {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.btn2 {
+    margin-left: 5px;
+}
+video::-webkit-media-controls-panel {
+    justify-content: flex-start !important;
+}
+video::-webkit-media-controls-play-button {
+    align-self: flex-end !important;
+    margin-left: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+@media screen and (max-width: 800px) {
+    .fm {
+    margin-left: 0px;
+    }
+    .form-button {
+        margin-right: 0px !important;
+        margin-left: 0px;
+    }
+    .alert {
+        margin-left: 2%;
+        margin-right: 2%;
+    }
 }

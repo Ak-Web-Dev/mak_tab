@@ -84,6 +84,18 @@
           </div>
           </div>
 
+          <div class="card" style="width: 18rem;" data-bs-theme="dark">
+          <div class="card-body">
+            <h5 class="card-title">Saved Location</h5>
+            <div class="input-group mb-2">
+              <input type="text" id="postalCodeInput" class="form-control" placeholder="Enter Postal Code">
+              <button class="btn btn-primary" onclick="savePostalCode()">Save</button>
+            </div>
+            <hr />
+            <p class="small"><b>Info:</b> Reload the Page after entering your location exactly in this format:<br /> "City_Postal_Code, Country".<br /> Example: "64200, pakistan</p>
+        </div>
+        </div>
+
         </div>
       </div>
 
@@ -127,48 +139,58 @@
       updateClock();
       setInterval(updateClock, 1000);
 
-      function getLocalWeather() {
+      async function getLocalWeather() {
         const display = document.getElementById('weather-data');
-        if (!navigator.geolocation) {
-          alert("Geolocation is not supported by your browser for local weather data.");
+        const savedPostal = localStorage.getItem('saved_postal_code');
+
+        if (!savedPostal || savedPostal.trim() === "") {
+          display.textContent = "No postal code";
           return;
         }
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            try {
-              const [weatherResponse, geoResponse] = await Promise.all([
-                fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m`),
-                fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
-              ]);
-              
-              if (!weatherResponse.ok || !geoResponse.ok) throw new Error("Weather or Geo service error");
-              
-              const weatherdata = await weatherResponse.json();
-              const geodata = await geoResponse.json();
-              
-              const temp = weatherdata.current.temperature_2m;
-              const unit = weatherdata.current_units.temperature_2m;
-              const address = geodata.address;
-              const cityName = address.city || address.town || address.municipality || "Unknown City";
 
-              display.textContent = `${temp}${unit} (${cityName})`;
+        display.textContent = `Loading weather for ${savedPostal}...`;
 
-            } catch (error) {
-              display.textContent = `Unable to retrieve weather data.`;
-              console.error(error);
-            }
-          },
-          (error) => {
-            if(error.code === error.PERMISSION_DENIED) {
-              alert("Location access was denied, unable to load weather data.");
-            }
-            else {
-              alert("Couldn't determine your location, unable to load weather data. Check your device's GPS settings.");
-            }
+        try {
+          const geoResponse = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(savedPostal)}&format=json&limit=1&addressdetails=1`, {
+            headers: { 'User-Agent': 'MAK-Tab-Dashboard-App' }
+          });
+          
+          if (!geoResponse.ok) throw new Error("Geocoding service error");
+          const geoData = await geoResponse.json();
+
+          if (!geoData || geoData.length === 0) {
+            display.textContent = "Invalid postal code";
+            return;
           }
-        );
+
+          const lat = geoData[0].lat;
+          const lon = geoData[0].lon;
+          
+          const addr = geoData[0].address;
+          let cityName = addr.city || addr.town || addr.municipality || addr.village || addr.suburb || addr.county;
+
+          if (!cityName || /^\d+$/.test(cityName.trim())) {
+            const parts = geoData[0].display_name.split(',');
+            const realNamePart = parts.find(part => !/^\d+$/.test(part.trim()));
+            cityName = realNamePart ? realNamePart.trim() : savedPostal.split(',')[0].trim();
+          }
+
+          // Professional Clean Up: Strips out administrative suffixes case-insensitively
+          cityName = cityName.replace(/\b(tehsil|district|county|municipality|city)\b/gi, '').trim();
+
+          const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m`);
+          if (!weatherResponse.ok) throw new Error("Weather service error");
+          
+          const weatherData = await weatherResponse.json();
+          const temp = weatherData.current.temperature_2m;
+          const unit = weatherData.current_units.temperature_2m;
+
+          display.textContent = `${temp}${unit} (${cityName})`;
+
+        } catch (error) {
+          display.textContent = `Unable to retrieve weather data.`;
+          console.error(error);
+        }
       }
 
       function saveAndApplyShortcut(num) {
@@ -220,6 +242,17 @@
         });
       }
 
+      function savePostalCode() {
+        const postalCode = document.getElementById('postalCodeInput').value;
+        localStorage.setItem('saved_postal_code', postalCode);
+      }
+      function loadSavedPostalCode() {
+        const savedPostal = localStorage.getItem('saved_postal_code');
+        const inputField = document.getElementById('postalCodeInput');
+        if (inputField.value && savedPostal) {
+          inputField.value = savedPostal;
+        }
+      }
 
       window.addEventListener('DOMContentLoaded', () => {
         const greetings = [
@@ -233,6 +266,7 @@
 
         getLocalWeather();
         loadSavedShortcuts();
+        loadSavedPostalCode();
       });
     </script>
   </body>

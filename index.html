@@ -148,7 +148,7 @@
           return;
         }
 
-        display.textContent = `Loading weather for ${savedPostal}...`;
+        display.textContent = `Loading weather...`;
 
         try {
           const geoResponse = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(savedPostal)}&format=json&limit=1&addressdetails=1`, {

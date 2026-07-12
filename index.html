@@ -13,7 +13,7 @@
   <body>
     <div id="app"></div>
     <div class="alert alert-dark" data-bs-theme="dark" role="alert">
-      <h3>What's on Your Mind Today?</h3>
+      <h3 id="greeting">.</h3>
       <h6><span id="clock">00:00</span> | <span id="weather-data">Loading location...</span></h6>
       <form class="d-flex" role="search" action="https://www.google.com/search" method="GET">
         <input class="form-control me-2 fm" data-bs-theme="dark" type="search" placeholder="Search Google" aria-label="Search" name="q"/>
@@ -22,7 +22,11 @@
 
       <a class="btn btn-primary btn2" data-bs-toggle="collapse" href="#tools" role="button" aria-expanded="false" aria-controls="tools">⚙️ Tools</a>
       <a class="btn btn-primary btn2" data-bs-toggle="collapse" href="#nasa" role="button" aria-expanded="false" aria-controls="nasa">NASA Image Info</a>
-      <a class="btn btn-outline-light btn2">Github</a>
+      <a class="btn btn-outline-light btn2" href="https://github.com" id="btn1">Github</a>
+      <a class="btn btn-outline-light btn2" href="https://youtube.com" id="btn2">YouTube</a>
+      <a class="btn btn-outline-light btn2" href="https://gemini.google.com" id="btn3">Gemini</a>
+      <a class="btn btn-outline-light btn2" href="https://mail.google.com" id="btn4">Gmail</a>
+      <a class="btn btn-outline-light btn2" href="" target="_blank" id="btn5"><small>Add</small></a>
       <div class="collapse" id="tools">
         <div class="d-flex flex-row flex-wrap gap-2 p-3 tools">
 
@@ -38,13 +42,45 @@
               <p id="calcResult"></p>
           </div>
           </div>
+
           <div class="card" style="width: 18rem;"  data-bs-theme="dark">
           <div class="card-body">
-              <h5 class="card-title">Web Shortcuts</h5>
+              <h5 class="card-title">Shortcut Button 1</h5>
               <div class="input-group mb-2">
-              <input type="text" id="url1" class="form-control" value="https://wikipedia.org" style="margin-bottom: 0 !important;">
-              <button class="btn btn-primary" onclick="updateBrowserUrl()">Go</button>
+              <input type="text" id="name1" class="form-control" value="Github">
+              <input type="text" id="url1" class="form-control" value="https://github.com">
+              <button class="btn btn-primary" onclick="shortcut1()">Go</button>
+              </div><br />
+              <h5 class="card-title">Shortcut Button 2</h5>
+              <div class="input-group mb-2">
+              <input type="text" id="name2" class="form-control" value="YouTube">
+              <input type="text" id="url2" class="form-control" value="https://youtbue.com">
+              <button class="btn btn-primary" onclick="shortcut2()">Go</button>
+              </div><br />
+              <h5 class="card-title">Shortcut Button 3</h5>
+              <div class="input-group mb-2">
+              <input type="text" id="name3" class="form-control" value="Gemini">
+              <input type="text" id="url3" class="form-control" value="https://gemini.google.com">
+              <button class="btn btn-primary" onclick="shortcut3()">Go</button>
               </div>
+          </div>
+          </div>
+
+          <div class="card" style="width: 18rem;"  data-bs-theme="dark">
+          <div class="card-body">
+              <h5 class="card-title">Shortcut Button 5</h5>
+              <div class="input-group mb-2">
+              <input type="text" id="name5" class="form-control" value="Github">
+              <input type="text" id="url5" class="form-control" value="https://github.com">
+              <button class="btn btn-primary" onclick="shortcut5()">Go</button>
+              </div>
+              <h5 class="card-title">Shortcut Button 6</h5>
+              <div class="input-group mb-2">
+              <input type="text" id="name6" class="form-control" value="YouTube">
+              <input type="text" id="url6" class="form-control" value="https://youtbue.com">
+              <button class="btn btn-primary" onclick="shortcut6()">Go</button>
+              </div><hr />
+              <p class="small"><b>Info:</b> The Input on the left side are for Names displayed on Button. While Input on right is for the URL of each button. The Button numbers are listed according to left to right.</p>
           </div>
           </div>
 
@@ -56,6 +92,7 @@
       </div>
 
     </div>
+    <p class="abt">Creator: <a href="https://ak-dev.is-a.dev">AK Dev</a></p>
     
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
@@ -133,7 +170,70 @@
           }
         );
       }
-      window.addEventListener('DOMContentLoaded', getLocalWeather);
+
+      function saveAndApplyShortcut(num) {
+        const nameVal = document.getElementById(`name${num}`).value;
+        const urlVal = document.getElementById(`url${num}`).value;
+        
+        localStorage.setItem(`shortcut_name_${num}`, nameVal);
+        localStorage.setItem(`shortcut_url_${num}`, urlVal);
+        
+        const btn = document.getElementById(`btn${num}`);
+        if (btn) {
+          if (num === 5) {
+            btn.innerHTML = `<small>${nameVal}</small>`;
+          } else {
+            btn.textContent = nameVal;
+          }
+          btn.href = urlVal;
+        }
+      }
+
+      function shortcut1() { saveAndApplyShortcut(1); }
+      function shortcut2() { saveAndApplyShortcut(2); }
+      function shortcut3() { saveAndApplyShortcut(3); }
+      function shortcut5() { saveAndApplyShortcut(5); }
+      function shortcut6() { saveAndApplyShortcut(6); }
+
+      function loadSavedShortcuts() {
+        const shortcutNumbers = [1, 2, 3, 4, 5, 6];
+        
+        shortcutNumbers.forEach(num => {
+          const savedName = localStorage.getItem(`shortcut_name_${num}`);
+          const savedUrl = localStorage.getItem(`shortcut_url_${num}`);
+          
+          const targetBtn = document.getElementById(`btn${num}`);
+          if (targetBtn && savedName && savedUrl) {
+            if (num === 5) {
+              targetBtn.innerHTML = `<small>${savedName}</small>`;
+            } else {
+              targetBtn.textContent = savedName;
+            }
+            targetBtn.href = savedUrl;
+          }
+          
+
+          const inputNameField = document.getElementById(`name${num}`);
+          const inputUrlField = document.getElementById(`url${num}`);
+          if (inputNameField && savedName) inputNameField.value = savedName;
+          if (inputUrlField && savedUrl) inputUrlField.value = savedUrl;
+        });
+      }
+
+
+      window.addEventListener('DOMContentLoaded', () => {
+        const greetings = [
+          "What's on Your Mind Today?",
+          "Search Ahead!",
+          "Your Lead.",
+          "Greetings..."
+        ];
+        const randomIndex = Math.floor(Math.random() * greetings.length);
+        document.getElementById('greeting').textContent = greetings[randomIndex];
+
+        getLocalWeather();
+        loadSavedShortcuts();
+      });
     </script>
   </body>
 </html>

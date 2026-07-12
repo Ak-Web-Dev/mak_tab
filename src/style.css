@@ -19,6 +19,7 @@ body {
     width: 100%;
     height: 100vh;
     border: none;
+
 }
 @font-face {
     font-family: "GSans";
@@ -71,6 +72,23 @@ video::-webkit-media-controls-play-button {
     margin-left: 10px !important;
     margin-bottom: 10px !important;
 }
+.card {
+    margin-right: 15px;
+}
+.small {
+    font-size: small;
+}
+.abt {
+    position: absolute;
+    bottom: 1%;
+    left: 1%;
+    background: #394046;
+    padding: 8px;
+    border-radius: 14px;
+    margin: 0;
+    z-index: -1;
+}
+.abt a {color: aqua;}
 
 @media screen and (max-width: 1024px) {
     .fm {
@@ -89,5 +107,8 @@ video::-webkit-media-controls-play-button {
     min-height: 100% !important;
     object-fit: cover;
     object-position: center;
+    }
+    .card {
+        margin-right: 0px;
     }
 }

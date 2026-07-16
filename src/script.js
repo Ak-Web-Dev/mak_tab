@@ -97,7 +97,7 @@ const defaultShortcuts = {
 
 function saveShortcut(id) {
   const nameVal = document.getElementById(`name${id}`).value.trim();
-  const urlVal = document.getElementById(`url${id}`).value.trim();
+  let urlVal = document.getElementById(`url${id}`).value.trim();
   if (urlVal && !/https?:\/\//i.test(urlVal)) {
     urlVal = 'https://' + urlVal;
     document.getElementById(`url${id}`).value = urlVal;

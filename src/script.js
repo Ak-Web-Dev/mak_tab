@@ -58,7 +58,6 @@ async function getLocalWeather() {
       cityName = realNamePart ? realNamePart.trim() : savedPostal.split(',')[0].trim();
     }
 
-    // Professional Clean Up: Strips out administrative suffixes case-insensitively
     cityName = cityName.replace(/\b(tehsil|district|county|municipality|city)\b/gi, '').trim();
 
     const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m`);
@@ -148,7 +147,6 @@ function getWallpaperUrl(baseName) {
   const ext = wallpaperExtensions[baseName] || 'jpg';
   const suffix = isMobile ? '-m' : '';
   
-  // This syntax tells Vite exactly how to resolve the dynamic path at runtime
   return new URL(`./assets/${baseName}${suffix}.${ext}`, import.meta.url).href;
 }
 

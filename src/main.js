@@ -50,7 +50,6 @@ then (response => response.json()).then(data => {
       document.querySelector("#nasa").innerHTML = `<p>Error: ${err.message}</p>`;
   });
 
-// Expose the apply function to the click handler
 window.setNasaWallpaper = function() {
     localStorage.setItem('selected_wallpaper', 'nasa');
     if (typeof window.applyActiveWallpaper === 'function') {

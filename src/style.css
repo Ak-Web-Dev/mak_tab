@@ -7,19 +7,9 @@ body {
     padding: 0;
     background-color: #373f46;
     font-family: GSans;
-}
-#bd {
-    user-select: none;
-    -webkit-user-drag: none;
-    z-index: -1;
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin: 0;
-    width: 100%;
-    height: 100vh;
-    border: none;
-
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
 }
 @font-face {
     font-family: "GSans";
@@ -29,18 +19,12 @@ body {
 }
 h1, h2, h3, h4, h5, h6, p {color: white;}
 
-.spinner-border {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    z-index: 2;
-}
 .alert {
     /*background: #2B3035;*/
     border: none;
     margin-right: 8%;
     margin-left: 8%;
-    margin-top: 8%;
+    margin-top: 5%;
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -64,14 +48,6 @@ h1, h2, h3, h4, h5, h6, p {color: white;}
     margin-left: 5px;
     margin-bottom: 10px;
 }
-video::-webkit-media-controls-panel {
-    justify-content: flex-start !important;
-}
-video::-webkit-media-controls-play-button {
-    align-self: flex-end !important;
-    margin-left: 10px !important;
-    margin-bottom: 10px !important;
-}
 .card {
     margin-right: 15px;
 }
@@ -80,8 +56,8 @@ video::-webkit-media-controls-play-button {
 }
 .abt {
     position: absolute;
-    bottom: 1%;
-    left: 1%;
+    bottom: 5px;
+    left: 5px;
     background: #394046;
     padding: 8px;
     border-radius: 14px;
@@ -89,6 +65,46 @@ video::-webkit-media-controls-play-button {
     z-index: -1;
 }
 .abt a {color: aqua;}
+
+.nasa-media-container {
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    margin: 0 auto;
+}
+.nasa-media-container img, .nasa-media-container video, .nasa-media-container iframe {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+}
+.nasa-media-container iframe {
+    aspect-ratio: 16/9;
+    width: 100%;
+    border: none;
+}
+
+#spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 2;
+}
+.card-img-top {
+    max-width: 250px;
+}
+#bd-selector .card {
+    max-width: 250px;
+    padding: 15px !important;
+    padding-bottom: 0 !important;
+    height: 350px;
+}
 
 @media screen and (max-width: 1024px) {
     .fm {
@@ -102,13 +118,18 @@ video::-webkit-media-controls-play-button {
         margin-left: 2%;
         margin-right: 2%;
     }
-    #bd {
-    width: 100%;
-    min-height: 100% !important;
-    object-fit: cover;
-    object-position: center;
-    }
     .card {
         margin-right: 0px;
+    }
+    .nasa-media-container {
+        max-width: 500px;
+        max-height: 500px;
+    }
+    body {
+        background-size: 150%;
+        background-position: top;
+    }
+    #bd-selector .card {
+        height: auto;
     }
 }
